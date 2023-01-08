@@ -1,0 +1,34 @@
+version: '3'
+
+vars:
+  proj_name: helloapp
+
+tasks:
+
+  default:
+    cmds:
+      - echo 'Hello World from Task!'
+    silent: true
+
+  rm:
+    cmds:
+      - rm -rf ./{{.proj_name}}
+
+  create:
+    cmds:
+      - flutter create {{.proj_name}}
+
+  build-apk:
+    cmds:
+      - cd {{.proj_name}}
+        ; flutter build apk
+
+  source-to-local:
+    cmds:
+      - cp -r ./source/*
+          ./{{.proj_name}}
+
+  source-to-win:
+    cmds:
+      - cp -r ./source/*
+          /mnt/e/WorkSpace/StudioProjects/{{.proj_name}}

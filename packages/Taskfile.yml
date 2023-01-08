@@ -1,0 +1,21 @@
+version: '3'
+
+includes:
+  run:
+    taskfile: ~/.taskfilehub/hubs/run.yml
+    vars:
+      ContainerName: helloflutter3
+      ImageName: mooxe/apt_flutter
+
+tasks:
+
+  default:
+    cmds:
+      - echo 'Hello World from Task!'
+    silent: true
+
+  run-dev:
+    cmds:
+      - task: run:run-dev
+        vars:
+          run_option: '-v ~/.taskfilehub:/root/.taskfilehub'
