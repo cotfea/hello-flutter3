@@ -2,6 +2,15 @@ version: '3'
 
 vars:
   proj_name: hello-flutter3
+  ContainerName: 'hello-flutter3'
+  ImageName: mooxe/apt_flutter
+
+includes:
+  image:
+    taskfile: ~/.taskfilehub/hubs/image.yml
+    vars:
+      ContainerName: '{{.ContainerName}}'
+      ImageName: '{{.ImageName}}'
 
 tasks:
 
@@ -10,20 +19,24 @@ tasks:
       - echo 'Hello World from Task!'
     silent: true
 
+  run-dev:
+    cmds:
+      - task: image:run:run-dev
+        vars:
+          run_option: '-v ~/.taskfilehub:/root/.taskfilehub'
+
+
   coder:
     cmds:
       # -e PASSWORD=netserver
-      - docker run
-          --rm
+      - podman run
+          -ti --rm
           --name=code-server
-          -e PUID=1000
-          -e PGID=1000
-          -e SUDO_PASSWORD=netserver
-          -p 8443:8443
-          -v $HOME/.coder/config/extensions:/config/extensions
-          -v $HOME/.local/share/fonts:/config/.local/share/fonts
-          -v $HOME/.gitconfig:/config/.gitconfig
-          -v $HOME/.local/bin/hx:/usr/local/bin/hx
-          -v $(pwd):/config/workspace/{{.proj_name}}
-          -v $(pwd)/.vscode:/config/workspace/.vscode
-            linuxserver/code-server
+          -p 8456:8456
+          -v ~/.coder/config/extensions:/root/.local/share/code-server/extensions:Z
+          -v ~/.local/share/fonts:/root/.local/share/fonts:Z
+          -v ~/.gitconfig:/root/.gitconfig:Z
+          -v ~/.local/bin/hx:/usr/local/bin/hx:Z
+          -v $(pwd):/root/WorkSpace/{{.proj_name}}
+          -v $(pwd)/.vscode:/root/WorkSpace/.vscode
+            mooxe/apt_coder

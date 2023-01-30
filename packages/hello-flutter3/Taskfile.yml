@@ -10,18 +10,28 @@ tasks:
       - echo 'Hello World from Task!'
     silent: true
 
-  rm:
-    cmds:
-      - rm -rf ./{{.proj_name}}
-
   create:
     cmds:
       - flutter create {{.proj_name}}
 
-  build-apk:
+  source:
+    cmds:
+      - cp -r ./source/* ./{{.proj_name}}
+
+  build:
     cmds:
       - cd {{.proj_name}}
         ; flutter build apk
+
+  rm:
+    cmds:
+      - rm -rf {{.proj_name}}
+
+  release:
+    cmds:
+      - mkdir -p ./release/{{.proj_name}}
+      - cp ./{{.proj_name}}/build/app/outputs/flutter-apk/app-release.apk
+          ./release/{{.proj_name}}/app-release.apk
 
   source-to-local:
     cmds:
